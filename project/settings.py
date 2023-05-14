@@ -1,6 +1,8 @@
 from decouple import config
 from pathlib import Path
 
+from datetime import timedelta
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,15 +21,27 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+BUILD_IN_APP = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'rest_framework',
+    
 ]
+
+PROJECT_APP = [
+    'apps.authentication'
+]
+
+INSTALLED_LIBRARY = [
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+]
+
+INSTALLED_APPS = BUILD_IN_APP + PROJECT_APP + INSTALLED_LIBRARY
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -111,3 +125,30 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+# RESTFramework Setting
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+        
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+    
+}
+
+
+'''
+    JWT Settings
+'''
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "SIGNING_KEY": config('SECRET_KEY'),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+  
+}
