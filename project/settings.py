@@ -37,8 +37,9 @@ PROJECT_APP = [
 
 INSTALLED_LIBRARY = [
     'rest_framework',
-    'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+   
 ]
 
 INSTALLED_APPS = BUILD_IN_APP + PROJECT_APP + INSTALLED_LIBRARY
@@ -136,19 +137,11 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        
     )
     
 }
 
-
-'''
-    JWT Settings
-'''
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "SIGNING_KEY": config('SECRET_KEY'),
-    "AUTH_HEADER_TYPES": ("Bearer",),
-  
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
