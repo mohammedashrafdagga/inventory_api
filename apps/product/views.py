@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ProductSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import generics
+from .models import Product
 
 class ProductCreateAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -14,3 +16,23 @@ class ProductCreateAPIView(APIView):
             product.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+
+# detail View
+class ProductDetailView(generics.RetrieveAPIView):
+    queryset = Product.items.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'slug'
+    
+# update product api view
+class ProductUpdateView(generics.UpdateAPIView):
+    queryset = Product.items.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'slug'
+    
+    
+# delete product api view
+class ProductDestroyView(generics.DestroyAPIView):
+    queryset = Product.items.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'slug'
