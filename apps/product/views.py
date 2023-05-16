@@ -1,21 +1,20 @@
-
+from rest_framework.response import Response
 from .serializers import ProductSerializer
 from rest_framework import generics
 from .models import Product
 
 
-# Product Create API View
-class ProductCreateAPIView(generics.CreateAPIView):
+class ProductMixin():
     queryset = Product.items.all()
     serializer_class = ProductSerializer
+    
+    
+# Product Create API View
+class ProductListCreateAPIView(ProductMixin, generics.ListCreateAPIView):
+    pass
     
   
 # Retrieve API View
-class ProductAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.items.all()
-    serializer_class = ProductSerializer
+class ProductAPIView(ProductMixin, generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'slug'
-    
-    
-    
     
