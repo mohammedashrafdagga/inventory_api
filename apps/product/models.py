@@ -12,7 +12,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, default=uuid.uuid4())
     bio = models.TextField(null=True, blank=True)
-    image = models.ImageField(upload_to='media/product_images/', null=True, blank=True)
+    image = models.ImageField(upload_to='product_images/', null=True, blank=True)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
     is_active = models.BooleanField(default=True)
