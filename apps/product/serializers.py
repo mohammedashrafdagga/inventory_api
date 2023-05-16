@@ -27,4 +27,11 @@ class ProductSerializer(serializers.ModelSerializer):
             product.save()
         return product
 
+    
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image')
+        if image:
+            image.name = f"{slugify(instance.name)}_{instance.id}.{image.name.split('.')[-1]}"
+            validated_data['image'] = image 
+        return super().update(instance, validated_data)
 

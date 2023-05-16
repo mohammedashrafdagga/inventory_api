@@ -15,3 +15,7 @@ class ProductAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.items.all()
     serializer_class = ProductSerializer
     lookup_field = 'slug'
+    
+    
+    
+    
