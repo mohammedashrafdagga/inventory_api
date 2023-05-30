@@ -17,3 +17,4 @@ class ProductAdminI(admin.ModelAdmin):
         if not change:
             obj.created_by = request.user
         return super().save_model(request, obj, form, change)
+    

@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from .models import Product
+from .models import Product, Category, Tag
 from django.utils.text import slugify
 import uuid
 import os
 from django.conf import settings
+
 
 
 
@@ -39,7 +40,18 @@ class ProductSerializer(serializers.ModelSerializer):
 
     
     def update(self, instance, validated_data):
-
+        # Update the product's tags
+        if 'tags' in validated_data:
+            tag_ids = validated_data.pop('tags')
+            tags = Tag.objects.filter(id__in=tag_ids)
+            instance.tags.set(tags)
+        
+        # update for category
+        if 'category' in validated_data:
+            category_id = int(validated_data.pop('category'))
+            category = Category.objects.get(id = category_id)
+            instance.category = category
+            
         # Perform any additional operations if needed
         image = self.context['request'].data.get('image')
         if image:
@@ -58,3 +70,33 @@ class ProductSerializer(serializers.ModelSerializer):
         super().update(instance, validated_data)
 
         return instance
+    
+    
+# Category Serializer
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+        read_only_fields = ('created_by',)
+        
+    def create(self, validated_data):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            validated_data['created_by'] = request.user
+        validated_data['slug'] = slugify(validated_data['name'])
+        return super().create(validated_data)
+    
+    
+# Tag Serializer 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+        read_only_fields = ('created_by',)
+        
+    def create(self, validated_data):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            validated_data['created_by'] = request.user
+        validated_data['slug'] = slugify(validated_data['name'])
+        return super().create(validated_data)

@@ -30,3 +30,29 @@ class Product(models.Model):
     
     def __str__(self):
         return self.name
+    
+    
+    
+    
+# Category and Tags Model
+class Category(models.Model):
+    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='categories')
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(    unique=True) 
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.name    
+    
+    
+    
+class Tag(models.Model):
+    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='tags')
+    name = models.CharField(max_length=255)
+    slug = models.SlugField( unique=True) 
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.name    

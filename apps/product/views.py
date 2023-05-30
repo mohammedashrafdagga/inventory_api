@@ -1,7 +1,7 @@
 from rest_framework.response import Response
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, CategorySerializer, TagSerializer
 from rest_framework import generics
-from .models import Product
+from .models import Product, Category, Tag
 
 
 class ProductMixin():
@@ -17,4 +17,18 @@ class ProductListCreateAPIView(ProductMixin, generics.ListCreateAPIView):
 # Retrieve API View
 class ProductAPIView(ProductMixin, generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'slug'
+    
+
+
+# Category Create Api View Serializer
+class CategoryCreateAPIView(generics.CreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    
+    
+
+    
+class TagCreateAPIView(generics.CreateAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
     
